@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.js"> </script>
+
+
+    <script type="text/babel">
+        /**
+         * 需求：动画效果
+         * 1. 渐进隐藏
+         */
+        class Life extends React.Component{
+            constructor(props) {
+                super(props);
+                //  初始化状态
+                this.state={
+                    opacity:1
+                }
+                // 绑定函数
+                this.handleClick = this.handleClick.bind(this)
+            }
+
+            handleClick(){
+                ReactDOM.unmountComponentAtNode(document.getElementById('example'))
+            }
+
+            //初始化：执行一次
+            componentDidMount(){
+                setInterval(function () {
+                    let {opacity} = this.state
+                    opacity -= 0.1
+                    if (opacity<=0){
+                        opacity=1
+                    }
+                    // 刷新状态
+                    this.setState({opacity})
+                }.bind(this),100)
+            }
+
+            //死亡：执行一次
+            componentWillUnmount(){
+
+            }
+            render() {
+                return (
+                    <div>
+                        <h2 style={{opacity:this.state.opacity}}>{this.props.msg}</h2>
+                        <input type="button" value="不活了" onClick={this.handleClick}/>
+                    </div>
+                );
+            }
+        }
+
+        //2.渲染虚拟dom
+        ReactDOM.render(<Life msg="React太难了，学不会怎么办？"/>,document.getElementById('example'))
+    </script>
+</body>
+
+</html>

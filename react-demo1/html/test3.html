@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/prop-types.js"></script>
+    <script type="text/javascript" src="../js/babel.js"> </script>
+    <script></script>
+
+
+    <script type="text/babel">
+        /* 问题1.数据保存在那个组件内？
+                看数据时某个组件需要（给它），还是某些组件需要
+           问题2.需要在子组件中改变父亲组件的状态
+                子组件不能直接改变父组件的状态
+                状态在哪个组件，更新状态的行为就应该定义在哪个组件
+                解决方案：父组件定义函数，传递给子组件，子组件调用
+        * */
+        // 1.定义组件
+        class App extends React.Component{
+
+            constructor(props) {
+                super(props);
+                // 初始化状态
+                this.state = {
+                    todos:['吃饭','睡觉','撸代码']
+                }
+                this.addTodo = this.addTodo.bind(this)
+            }
+
+            addTodo(todo){
+                // todo 不能这么写，vue可以
+                // this.state.todos.unshift(todo)
+                const {todos} = this.state
+                // 重复性check
+                if(todos.includes(todo)){
+                    alert('已存在')
+                    return
+                }
+                todos.unshift(todo)
+                // 更新状态:统一的出口
+                this.setState({todos})
+            }
+
+            render() {
+                const {todos} = this.state
+                return (
+                    <div>
+                        <h1>Simple TODO List</h1>
+                        <Add count={todos.length} addTodo={this.addTodo}/>
+                        <List todos={todos}/>
+                    </div>
+                );
+            }
+        }
+
+        class Add extends React.Component{
+
+            constructor(props) {
+                super(props);
+                this.add = this.add.bind(this)
+            }
+
+            add(){
+                //1. 读取输入数据
+                const todo = this.xxx.value.trim()
+                //2. 合法性请检查
+                if (!todo){
+                    return
+                }
+                //3.重复性check
+                //4. 添加
+                this.props.addTodo(todo)
+                //5.清除输入
+                this.xxx.value=''
+            }
+            render() {
+                return (
+                    <div>
+                        <input type="text" ref={input => this.xxx = input}/>
+                        <button  onClick={this.add}>add #{this.props.count+1}</button>
+                    </div>
+                );
+            }
+        }
+        //声明
+        Add.prototypes={
+            count:PropTypes.number.isRequired,
+            addTodo: PropTypes.func.isRequired
+        }
+
+        class List extends React.Component{
+            render() {
+                const {todos} = this.props
+                return (
+                    <ul>
+                        {
+                            todos.map((todo,index) => <li key={index}>{todo}</li>)
+                        }
+                    </ul>
+
+                );
+            }
+        }
+        List.prototypes = {
+            todos:PropTypes.array.isRequired
+        }
+        // 2.渲染组件
+        ReactDOM.render(<App/>,document.getElementById('example'))
+    </script>
+</body>
+
+</html>

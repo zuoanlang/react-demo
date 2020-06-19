@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.js"> </script>
+    <script></script>
+
+
+    <script type="text/babel">
+        // 1.定义组件
+        class MyComponent extends React.Component{
+
+            constructor(props) {
+                super(props);
+                this.showInput = this.showInput.bind(this)
+                this.handleBlur = this.handleBlur.bind(this)
+
+
+            }
+
+            showInput(){
+                const input = this.refs.content
+                alert(this.xxx.value)
+            }
+
+            handleBlur(event){
+                alert(event.target.value)
+            }
+
+            render(){
+                return(
+                    <div>
+                        <input type="text" ref="content"/>&nbsp;
+                        <input type="text" ref={input => this.xxx = input}/>&nbsp;
+                        <button onClick={this.showInput}>提示输入</button>&nbsp;
+                        <input type="text" placeholder="失去焦点提示内容" onBlur={this.handleBlur}/>
+                    </div>
+                )
+            }
+        }
+        // 2.渲染组件
+        ReactDOM.render(<MyComponent/>,document.getElementById('example'))
+    </script>
+</body>
+
+</html>

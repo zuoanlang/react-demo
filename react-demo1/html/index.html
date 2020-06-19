@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/javascript" src="../js/react.development.js"></script>
+    <script type="text/javascript" src="../js/react-dom.development.js"></script>
+    <script type="text/javascript" src="../js/babel.js"> </script>
+    <script type="text/javascript" src="../js/axios.js"> </script>
+
+
+    <script type="text/babel">
+        class MostStarRepo extends React.Component{
+            state = {
+                repoName:'',
+                repoUrl:''
+            }
+
+            componentDidMount () {
+                // 使用axios发送请求
+                const url = `https://github.com/search?q=r&type=Repositories`
+                axios.get(url)
+                    .then(response =>{
+                    const result = response.data
+                    console.log(result);
+                })
+            }
+            render() {
+                const { repoName,repoUrl } = this.state
+                if (!repoName){
+                    return <h2>LOADING...</h2>
+                } else {
+                    return <h2>Most star repo is <a href={repoUrl}>{repoUrl}</a></h2>
+                }
+            }
+        }
+
+
+
+        //2.渲染虚拟dom
+        ReactDOM.render(<MostStarRepo/>,document.getElementById('example'))
+    </script>
+</body>
+
+</html>
